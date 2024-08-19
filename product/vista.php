@@ -54,7 +54,7 @@
                     <div class="productos-container">
                         <?php
                         include_once '../method/productos_class.php'; 
-                        echo Productos::mostrarProductos();
+                        echo Productos::mostrarPro();
                         ?>
                     </div>
                 </div>           

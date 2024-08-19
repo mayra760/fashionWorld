@@ -324,7 +324,12 @@ class Productos{
             $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>"; // Cambiado a strtolower
             $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
             $salida .= "<strong> $" . $fila['precio'] . "</strong>";
-            $salida .= "<img src='" . $fila['ruta_img'] . "' alt='" . $fila['ruta_img'] . "' class='img-thumbnail'>";
+            if (!empty($fila['ruta_img'])) {
+                $rutaImagen = "../imagenes/" . $fila['ruta_img'];
+                $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="img-thumbnail"></div>';
+            } else {
+                $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
+            }
             $salida .= "<div class='carfav'>";
             $salida .= "<button class='btn btn-info btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
             $salida .= "<button class='btn btn-info btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button>";
