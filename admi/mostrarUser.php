@@ -5,7 +5,7 @@
           <input id="nombreUser" class="form-control me-2" type="search" placeholder="usuario" aria-label="Search">
           <button id="enviar" class="btn btn-outline-success" type="button" onclick="buscadorUser()">Buscar</button>
       </for>
-  </div>
+  </div> 
 </nav>
 
 <div class="row" id="mostrarUsuarios">
