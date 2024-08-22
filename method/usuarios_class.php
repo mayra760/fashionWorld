@@ -28,7 +28,7 @@ class Usuarios{
     //         $salida .= "</div>";
     //     }
         
-    //     $salida .= "</div>"; 
+    //     $salida .= "</div>";  x
     //     return $salida;
     // }
     public static function perfilUsuario($id) {

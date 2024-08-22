@@ -11,7 +11,7 @@
 </head>
 <body>
     <?php
-    include '../product/accesorios.php';
+    include '../product/plantill2.php';
     include_once '../method/productos_class.php';
     ?>
 <div class="producto" onmouseover="cambiarColor(this)" onmouseout="restablecerColor(this)">

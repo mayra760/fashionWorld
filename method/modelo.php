@@ -7,7 +7,7 @@ class Modelo{
         $sql .= "where documento='$documento' and contraseña='$contraseña'";
         return $resultado = $conexion->query($sql);
 
-    }
+    } 
     public static function sqlRegistar($documento,$nombre,$apellido,$correo,$contraseña,$fecha){
         include("db_fashion/cb.php");
         $sql = "insert into tb_usuarios(documento,nombre,apellido,correo,contraseña,fecha,rol) ";
@@ -16,7 +16,6 @@ class Modelo{
         return $resultado = $conexion->query($sql); 
         
     }
-
     public static function sqlPerfil($id){
         include("db_fashion/cb.php");
         $sql = "select * from tb_usuarios where documento = '$id'";
@@ -258,7 +257,7 @@ class Modelo{
     }
 /**mayra */
     public static function sqlMostrarProd(){
-        include 'db_fashion/cb.php';
+        include("db_fashion/cb.php");
         $ids = [1, 8,3,4,14, 19,16,20,23];
         $id = implode(',', $ids);
         $sql = "SELECT * FROM tb_productos WHERE id_producto IN ($id)";

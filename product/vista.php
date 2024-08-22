@@ -7,23 +7,9 @@
     <link href="../css/pie_pagina.css" rel="stylesheet">
     <link href="../css/bienveInicio.css" rel="stylesheet">
     <link href="../css/ofertaVis.css" rel="stylesheet">
-    <style>
-        .producto img {
-            width: 80%;
-            height: 60%;
-            transition: transform 0.1s ease;
-        }
-        .producto:hover {
-            transform: scale(1.1); 
-        }
-        .producto:hover img {
-            transform: scale(2.2);
-        }
-    </style>
-
 </head>
 <body>
-<div class="banner">
+<div class="banner"> 
         <div class="banner-text">
             <h2>REBAJAS DE TEMPORADA</h2>
             <h1>HASTA -70%</h1>
@@ -40,8 +26,8 @@
             </div>
         </div>
         <div class="hand-icon"></div>
-    </div>
-    
+    </div><br>
+    <center><a href="../usuarios/navUser.php" class="btn btn-home"><i class="fas fa-home"></i></a></center>
     <div class="product-view">
         <div class="container-fluid">
         <div class="welcome-message">
@@ -54,7 +40,7 @@
                     <div class="productos-container">
                         <?php
                         include_once '../method/productos_class.php'; 
-                        echo Productos::mostrarPro();
+                        echo Productos::mostrarProductos();
                         ?>
                     </div>
                 </div>           
@@ -81,7 +67,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><br><br>
     <div class="footer">
         <div class="container">
             <div class="row">

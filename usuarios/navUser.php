@@ -40,7 +40,7 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Menú 
+          Menú  
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="../product/favoritos.php">Tus favoritos</a></li>
@@ -50,7 +50,7 @@
             <li><a class="dropdown-item" href="conBaBus.php?seccion=cerrarSe">Cerrar sesión</a></li>
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="../lista_deseos.php">Lista deseos</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="../facturacion/lista_deseos.php">Lista deseos</a></li>
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="controlador.php?seccion=seccion4">Video</a></li>
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="controlador.php?seccion=seccion6">Ver</a></li>
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="https://www.sena.edu.co" target="blank">Ir al Sena</a></li>

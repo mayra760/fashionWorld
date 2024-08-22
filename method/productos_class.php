@@ -88,7 +88,7 @@ class Productos{
             $salida = 0;
         }
         return $salida;
-    }
+    } 
     
     public static function eliminarCate($id){
         $salida = 0;
@@ -338,7 +338,7 @@ class Productos{
         }
         $salida .= "</div>";
     
-        return $salida;
+        return $salida; 
     }
     
     

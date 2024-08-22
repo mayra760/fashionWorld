@@ -1,5 +1,6 @@
 <div class="perfil">
 <?php
+include ("../method/usuarios_class.php");
 echo Usuarios::perfilUsuario($_SESSION['id']);
 ?>
 
@@ -14,5 +15,5 @@ echo Usuarios::perfilUsuario($_SESSION['id']);
     <li><a class="dropdown-item" href="conBaBus.php?eliCuenta=true&seccion=ctroUser">elimina tu cuenta</a></li>
   </ul>
 
-</div>
+</div> 
 
