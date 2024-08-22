@@ -7,10 +7,12 @@ if(isset($_GET['crear'])){
     $id_pro = $_GET['id_producto'];
     $nombre = $_GET['nombre'];
     $precio = $_GET['precio'];
+    $color = $_GET['color'];
+    $tallas = $_GET['tallas'];
     $cantidad = $_GET['cantidad'];
     $descripcion = $_GET['descripcion'];
-    $imagen = $_GET['imagen'];
-    if( Productos::agregarPro($id_pro, $nombre, $precio, $cantidad, $descripcion, $imagen) == 1){
+    $ruta_img = $_GET['ruta_img'];
+    if( Productos::agregarPro($id_pro, $nombre, $precio, $cantidad, $color, $tallas, $descripcion, $ruta_img) == 1){
         header("location:ctroBar.php?seccion=verPro");
     }
 }
@@ -106,11 +108,3 @@ if(isset($_GET['ediUser'])) {
         }
     }
 }
-
-
-
-   
-
-
-    
-

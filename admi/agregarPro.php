@@ -1,5 +1,4 @@
-
-    
+  
     <div class="card-content">
       <form action="ctroAdmi.php?" enctype="multipart/form-data" >
         <div class="form-group">
@@ -22,6 +21,14 @@
           <label for="cantidad" id="cantidad_p">Cantidad:</label>
           <input type="number" id="cantidad" name="cantidad">
         </div>
+        <div class="form-group" id="para_co">
+          <label for="color" id="color_co">Color:</label>
+          <input type="text" id="color" name="color">
+        </div>
+        <div class="form-group" id="para_ta">
+          <label for="talla" id="talla_p">talla:</label>
+          <input type="text" id="talla" name="talla">
+        </div>
         <div class="form-group" id="para_des">
           <label for="descripcion" id="descri_p">Descripción:</label>
           <textarea id="descripcion" name="descripcion" filas="4"></textarea>
@@ -33,6 +40,3 @@
     </div>
 
   <script src="../js/imgPrevia.js"></script>
-  
-  
-  

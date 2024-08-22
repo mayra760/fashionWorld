@@ -18,7 +18,4 @@ if($seccion=="cerrarSe"){
     setcookie(session_name(), "", time()-3600, "/");
     header("location:../index.php");
 }
-
-
-
 include("navAdmi.php");
