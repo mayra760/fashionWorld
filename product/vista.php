@@ -27,7 +27,7 @@
         </div>
         <div class="hand-icon"></div>
     </div><br>
-    <center><a href="../usuarios/navUser.php" class="btn btn-home"><i class="fas fa-home"></i></a></center>
+    <center><a href="../usuarios/conBaBus.php?seccion=home" class="btn btn-home"><i class="fas fa-home"></i></a></center>
     <div class="product-view">
         <div class="container-fluid">
         <div class="welcome-message">

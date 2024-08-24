@@ -20,7 +20,9 @@ include 'plantill2.php';
         include_once '../method/productos_class.php';
         echo Productos::verCarrito();
         ?>
-         <center><button><a href="../facturacion/factura.php"></a>pagar ahora</button></center>
+         
+         <center><a href="factura.php" class="btn btn-success">Pagar Ahora</a></center>
+
     </div>
    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

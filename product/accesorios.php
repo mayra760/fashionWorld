@@ -1,12 +1,9 @@
-
 <head>
-
     <title><?php echo 'accesorios'; ?></title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="../css/estilo.css" rel="stylesheet">
-   
     <link href="../css/plantill2.css" rel="stylesheet"><!-- Incluye el CSS para contadores -->
 </head>
 <body> 
