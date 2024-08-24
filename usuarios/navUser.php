@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <title>INICIO USUARIO</title>
      <!-- Google tag (gtag.js) -->
      <script async src="https://www.googletagmanager.com/gtag/js?id=G-MW395SN41J"></script>
         <script>
@@ -54,6 +55,7 @@
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="controlador.php?seccion=seccion4">Video</a></li>
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="controlador.php?seccion=seccion6">Ver</a></li>
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="https://www.sena.edu.co" target="blank">Ir al Sena</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="../facturacion/fechaEspecial.php">Fechas Especiales</a></li> 
         </ul>
         <form id="formulario"class="d-flex ms-auto">
           <input id="nombrePro" class="form-control me-2" type="search" placeholder="producto" aria-label="Search">

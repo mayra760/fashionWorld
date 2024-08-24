@@ -21,7 +21,5 @@ if($seccion=="cerrarSe"){
     header("location:../index.php");
 }
 
-
-
 include("navUser.php");
 
