@@ -70,7 +70,7 @@
             <h1 class="display-4"> Bienvenido a Fashion World</h1>
             <p class="lead">Explora nuestras colecciones y encuentra lo que estás buscando.</p>
             <p class="lead">Encuentra lo mejor en moda y estilo.</p>
-            <a href="../facturacion/facturacion.php" class="btn btn-warning btn-lg">Comprar Ahora</a>
+            <a href="../product/vista.php" class="btn btn-warning btn-lg">Comprar Ahora</a>
         </div>
     </div>
 
@@ -85,7 +85,7 @@
                     <img src="../imagenes/favoritos1.png" class="img-fluid" alt="Producto 1">
                     <h5 class="product-title">Zapatos</h5>
                     <p class="product-description">Zapatos blancos de plataforma</p>
-                    <a href="producto1.php" class="btn btn-primary">Ver Producto</a>
+                    <a href="../product/zapatos.php" class="btn btn-primary">Ver Producto</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -93,7 +93,7 @@
                     <img src="../imagenes/favorito5.png" class="img-fluid" alt="Producto 2">
                     <h5 class="product-title">Buzo</h5>
                     <p class="product-description">Buzo malgalarga negro</p>
-                    <a href="producto2.php" class="btn btn-primary">Ver Producto</a>
+                    <a href="../product/categ.php" class="btn btn-primary">Ver Producto</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -101,7 +101,7 @@
                     <img src="../imagenes/favorito7.png" class="img-fluid" alt="Producto 3">
                     <h5 class="product-title">Camisa</h5>
                     <p class="product-description">camisa oversiza negra</p>
-                    <a href="producto3.php" class="btn btn-primary">Ver Producto</a>
+                    <a href="../product/categ.php" class="btn btn-primary">Ver Producto</a>
                 </div>
             </div>
         </div>
@@ -114,19 +114,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <a href="categorias-mujer.php" class="d-block category-card">
+                    <a href="../product/categ.php" class="d-block category-card">
                         <img src="../imagenes/ropa-mujer.png" alt="Mujeres" class="img-fluid">
                         <div class="category-text">Mujeres</div>
                     </a>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <a href="categorias-ninos.php" class="d-block category-card">
+                    <a href="../product/niñ@.php" class="d-block category-card">
                         <img src="../imagenes/ropa-niños.jpg" alt="Niños" class="img-fluid">
                         <div class="category-text">Niños</div>
                     </a>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <a href="categorias-hombre.php" class="d-block category-card">
+                    <a href="../product/categ.php" class="d-block category-card">
                         <img src="../imagenes/ropa-hombres.jpg" alt="Hombres" class="img-fluid">
                         <div class="category-text">Hombres</div>
                     </a>
@@ -150,7 +150,7 @@
             </div>
             <div class="col-lg-3">
                 <h3>Más Productos</h3>
-                <a href="categorias.php">
+                <a href="../product/vista.php">
                     <img src="../imagenes/logo.jpeg" alt="Logo" class="img-fluid" height="90" width="90">
                 </a>
             </div>

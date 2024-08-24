@@ -5,8 +5,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="../css/estilo.css" rel="stylesheet">
     <link href="../css/stylePro.css" rel="stylesheet">
-    <link href="../css/pie_pagina.css" rel="stylesheet">
-    <link href="../css/ofertaVis.css" rel="stylesheet">
+    
 </head>
 <body> 
 <?php 
