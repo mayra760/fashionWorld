@@ -36,11 +36,11 @@
         hace brillar tu estilo. ¡Gracias por ser parte de nuestra familia!</p>
     </div>
             <div class="row">
-                <div class="col-lg-8">
+             <div class="col-lg-8">
                     <div class="productos-container">
                         <?php
                         include_once '../method/productos_class.php'; 
-                        echo Productos::mostrarProductos();
+                        echo Productos::mostrarPro();
                         ?>
                     </div>
                 </div>           

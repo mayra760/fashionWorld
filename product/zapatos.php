@@ -17,7 +17,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-10">
-                    <?php echo Productos::verZapatos(); ?>
+                
+                    <?php 
+                    $categoria = 4;
+                    echo Productos::verZapatos($categoria);
+                     ?>
                 </div>
                 <div class="col-2"> <!-- Columna para tallas y colores -->
                     <div class="selector">

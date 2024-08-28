@@ -9,22 +9,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="../css/estilo.css" rel="stylesheet">
     <link href="../css/stylePro.css" rel="stylesheet">
-</head>
+</head> 
 <body>
     <?php
     include '../product/plantill2.php';
     include_once '../method/productos_class.php';
     ?>
 
-    <!-- Mensaje de bienvenida -->
-
 <div class="container-fluid">
 
     <div class="producto" onmouseover="cambiarColor(this)" onmouseout="restablecerColor(this)">
         <div class="row">
-            <div class="col-10">
-                <?php echo Productos::CateNiños()?>
-            </div>
+        <div class="col-10">
+            <?php
+                // Llama a la función CateNiños con el ID de la categoría de "Niños"
+                $categoria = 3; // Cambia este ID según la categoría de "Niños" en tu base de datos
+                echo Productos::CateNiños($categoria);
+            ?>
+        </div>
+
             <div class="col-2"> <!-- Columna para tallas y colores -->
                     <div class="selector">
                             <label for="color">Color:</label>

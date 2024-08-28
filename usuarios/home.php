@@ -1,7 +1,6 @@
 
 <div class="mostrarPro" id="mostrarPro">
 <?php 
-    echo Productos::mostrarProductos();
+    echo Productos::mostrarPro();
 ?>
 </div>
-

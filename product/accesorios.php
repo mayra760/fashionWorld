@@ -4,7 +4,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="../css/estilo.css" rel="stylesheet">
-    <link href="../css/plantill2.css" rel="stylesheet"><!-- Incluye el CSS para contadores -->
+    <link href="../css/plantill2.css" rel="stylesheet">
+
 </head>
 <body> 
     <?php
@@ -14,9 +15,14 @@
 <div class="producto" onmouseover="cambiarColor(this)" onmouseout="restablecerColor(this)">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-10">
-            <?php echo Productos::verAccesorios(); ?>
-            </div>
+        <div class="col-10">
+            <?php
+                // Especifica el ID de la categoría para los accesorios
+                $categoria = 5; // Cambia este ID según la categoría de accesorios en tu base de datos
+                echo Productos::verAccesorios($categoria);
+            ?>
+        </div>
+
             <div class="col-2"> <!-- Columna para tallas y colores -->
                     <div class="selector">
                             <label for="color">Color:</label>

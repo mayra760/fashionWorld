@@ -2,50 +2,65 @@
 class Productos{
 
     public static function mostrarPro($buscar = null) {
-    include_once("modelo.php");
-    include("controler_login.php");
+        include_once("controler_login.php");
+        include_once("modelo.php");
     
-    $salida = "";
-    $salida .= '<div class="productos-container">';
+        $salida = "";
+        $salida .= '<div class="productos-container">';
     
-    $consulta = Modelo::sqlMostrarPro($buscar);
+        // Llamar a la función del modelo para obtener los productos con sus likes
+        $consulta = Modelo::sqlMostrarPro($buscar);
     
-    if ($consulta->num_rows > 0) {
-        while ($fila = $consulta->fetch_assoc()) {
-            $salida .= '<div class="producto">';
-            
-            if (Loguin::verRol($_SESSION['id']) == 0) {
-                $salida .= "<span class='producto-id'>ID: " . $fila['id_producto'] . "</span>";
+        if ($consulta->num_rows > 0) {
+            while ($fila = $consulta->fetch_assoc()) {
+                $salida .= '<div class="producto">';
+    
+                if (Loguin::verRol($_SESSION['id']) == 0) {
+                    $salida .= "<span class='producto-id'>ID: " . $fila['id_producto'] . "</span>";
+                }
+    
+                $salida .= "<h3 class='producto-nombre'>" . $fila['nombre_producto'] . "</h3>";
+                $salida .= "<p class='producto-precio'>Precio: $" . number_format($fila['precio'], 3) . "</p>";
+                $salida .= "<p class='producto-cantidad'>Cantidad: " . $fila['cantidad'] . "</p>";
+                $salida .= "<p class='producto-detalles'>" . $fila['detalles'] . "</p>";
+    
+                if (!empty($fila['ruta_img'])) {
+                    // Asegúrate de que la ruta sea correcta
+                    $rutaImagen = "../img/" . $fila['ruta_img'];
+                    // Verifica que el archivo existe antes de mostrar la imagen
+                    if (file_exists($rutaImagen)) {
+                        $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="producto-imagen"></div>';
+                    } else {
+                        $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
+                    }
+                } else {
+                    $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
+                }
+    
+                // Mostrar el número de "likes"
+                $salida .= "<p class='producto-likes'>Likes: " . $fila['total_likes'] . "</p>";
+    
+                // Verificar si el usuario actual ya dio like
+                $salida .= "<div class='producto-acciones'>";
+                if (Loguin::verRol($_SESSION['id']) == 0) {
+                    $salida .= "<a href='ctroBar.php?dato=" . $fila['id_producto'] . "&seccion=editarPro' class='btn btn-editar'>Editar</a>";
+                }
+                $likeClass = self::verificLike($_SESSION['id'], $fila['id_producto']) ? 'fas fa-heart liked' : 'far fa-heart';
+                $salida .= "<i class='$likeClass' data-id_producto='" . $fila['id_producto'] . "' onclick='likear(this)'></i>";
+                $salida .= '</div>'; // Cierre del div .producto
+    
+                $salida .= '</div>'; // Cierre del div .producto
             }
-            
-            $salida .= "<h3 class='producto-nombre'>" . $fila['nombre_producto'] . "</h3>";
-            $salida .= "<p class='producto-precio'>Precio: $" . number_format($fila['precio'], 2) . "</p>";
-            $salida .= "<p class='producto-cantidad'>Cantidad: " . $fila['cantidad'] . "</p>";
-            $salida .= "<p class='producto-detalles'>" . $fila['detalles'] . "</p>";
-            
-            if (!empty($fila['ruta_img'])) {
-                $rutaImagen = "../imagenes/" . $fila['ruta_img'];
-                $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="producto-imagen"></div>';
-            } else {
-                $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
-            }
-            
-            $likeClass = Productos::verificLike($_SESSION['id'], $fila['id_producto']) ? 'fas fa-heart liked' : 'far fa-heart';
-            $salida .= "<div class='producto-acciones'>";
-            $salida .= "<a href='ctroBar.php?dato=" . $fila['id_producto'] . "&seccion=editarPro' class='btn btn-editar'>Editar</a>";
-            $salida .= "<i class='$likeClass' data-id_producto='" . $fila['id_producto'] . "' onclick='likear(this)'></i>";
-            $salida .= "</div>";
-            
-            $salida .= '</div>'; // Cierre del div .producto
+        } else {
+            $salida .= "<p>No se encontraron productos.</p>";
         }
-    } else {
-        $salida .= "<p>No se encontraron productos.</p>";
+    
+        $salida .= '</div>'; // Cierre del div .productos-container
+    
+        return $salida;
     }
     
-    $salida .= '</div>'; // Cierre del div .productos-container
     
-    return $salida;
-}
 
     
 
@@ -103,16 +118,18 @@ class Productos{
     }
 
 
-    public static function agregarPro($id_pro, $nombre, $precio, $cantidad, $descripcion, $imagen){
+    public static function agregarPro($id_pro, $id_categoria, $nombre, $precio, $cantidad, $descripcion, $color, $tallas, $ruta_img){
         include_once("modelo.php");
         $salida = 0;
-        $consulta = Modelo::sqlAgregarPro($id_pro, $nombre, $precio, $cantidad, $descripcion, $imagen);
-        if($consulta){
+        $consulta = Modelo::sqlAgregarPro($id_pro, $id_categoria, $nombre, $precio, $cantidad, $descripcion, $color, $tallas, $imagen);
+        if($consulta){ 
             $salida = 1;
         }
         return $salida;
 
     }
+
+    
     public static function agregarCate($id_categoria, $categoria){
         include_once("modelo.php");
         $consulta = Modelo::sqlAgregarCate($id_categoria, $categoria);
@@ -164,10 +181,10 @@ class Productos{
         return $salida; 
     }
 
-    public static function editarProducto($id_producto,$nombre,$precio,$cantidad,$detalles,$imagen){
+    public static function editarProducto($id_producto,$nombre,$precio,$cantidad,$detalles,$color,$tallas,$imagen){
         include_once("modelo.php");
         $salida = 0;
-        $consulta = Modelo::sqlEditarPro($id_producto,$nombre,$precio,$cantidad,$detalles,$imagen);
+        $consulta = Modelo::sqlEditarPro($id_producto,$nombre,$precio,$cantidad,$detalles,$color, $tallas,$imagen);
         if($consulta){
             $salida = 1;
         }
@@ -293,7 +310,7 @@ class Productos{
         }
         return 0;
     }
-    
+     
     public static function agregarLike($usuario_id, $producto_id) {
         include_once("modelo.php");
         
@@ -301,98 +318,96 @@ class Productos{
     }
 
 /**mayra */
-    public static function mostrarProductos() {
-        include 'modelo.php';
-        $salida = "";
-        $consulta=Modelo::sqlMostrarProd();
-        while ($fila = $consulta->fetch_assoc()) {
 
-            $salida .= "<div class='producto'>";
-            $salida .= "<img src='" . $fila['ruta_img'] . "' alt='" . $fila['detalles'] . "' width='100px' class='img-thumbnail'>";
-            $salida .= "<p><strong>" . $fila['detalles'] . "</strong></p>";
-            $salida .= "</div>";
-        }
-        return $salida;
-    }
-
-    public static function mostrarCategorias() {
-        include 'modelo.php';
-        $salida = "";
-        $consulta = Modelo::sqlmostrarCateg();
-        $salida .= "<div class='categorias'>";
-        while ($fila = $consulta->fetch_assoc()) {
-            $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>"; // Cambiado a strtolower
-            $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
-            $salida .= "<strong> $" . $fila['precio'] . "</strong>";
-            if (!empty($fila['ruta_img'])) {
-                $rutaImagen = "../imagenes/" . $fila['ruta_img'];
-                $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="img-thumbnail"></div>';
-            } else {
-                $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
-            }
-            $salida .= "<div class='carfav'>";
-            $salida .= "<button class='btn btn-info btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
-            $salida .= "<button class='btn btn-info btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button>";
-            $salida .= "</div><br>";
-            $salida .= "</div><br>";
-        }
-        $salida .= "</div>";
-    
-        return $salida; 
-    }
-    
-    
-    
-    
-
-    public static function CateNiños() {
-        include 'modelo.php';
-        $salida="";
-        $consulta=Modelo::sqlCateNiños();
-        $salida .= "<div class='categorias'>";
-        while ($fila = $consulta->fetch_assoc()) {
-            $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>";  
-            $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
-            $salida .= "<strong> $" . $fila['precio'] . "</strong>";
-            $salida .= "<img src='" . $fila['ruta_img'] . "' alt='" . $fila['nombre_producto'] . "' class='img-thumbnail'>";
-            $salida .= "<div class='carfav'>";
-            $salida.="<button class='btn btn-primary btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
-            $salida .= "<button class='btn btn-primary btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button>";
-            $salida .= "</div><br>";
-            $salida .= "</div><br>";
-        }
-        $salida .= "</div>";
+// productos_class.php
+public static function mostrarCategorias($categoria) {
+    include 'modelo.php';
+    $salida = "";
+    $consulta = Modelo::sqlmostrarCateg($categoria);
+    $salida .= "<div class='categorias'>";
+    while ($fila = $consulta->fetch_assoc()) {
+        $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>";
+        $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
+        $salida .= "<strong> $" . $fila['precio'] . "</strong>";
         
-        return $salida;
-    }
-
-    public static function verAccesorios() {
-        include 'modelo.php';
-        $salida="";
-        $consulta=Modelo::sqlverAcce();
-        $salida .= "<div class='categorias'>";
-        while ($fila = $consulta->fetch_assoc()) {
-            $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>";
-            $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
-            $salida .= "<strong> $" . $fila['precio'] . "</strong>";
-            $salida .= "<img src='" . $fila['ruta_img'] . "' alt='" . $fila['nombre_producto'] . "' class='img-thumbnail'>";
-            $salida .= "<div class='carfav'>";
-            $salida .= "<button class='btn btn-info btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i>  carrito</button>-";
-            $salida .= "<button class='btn btn-info btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button><br>";
-            $salida .= "</div><br>";
-            $salida .= "</div>";
-         
-            
+        if (!empty($fila['ruta_img'])) {
+            $rutaImagen = $fila['ruta_img'];
+            $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="img-thumbnail"></div>';
+        } else {
+            $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
         }
-        $salida .= "</div>";
-        
-        return $salida;
+        $salida .= "<div class='carfav'>";
+        $salida .= "<button class='btn btn-info btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
+        $salida .= "<button class='btn btn-info btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button>";
+        $salida .= "</div><br>";
+        $salida .= "</div><br>";
     }
+    $salida .= "</div>";
+
+    return $salida; 
+}
+
+public static function CateNiños($categoria) {
+    include 'modelo.php';
+    $salida = "";
+    $consulta = Modelo::sqlCateNiños($categoria);
+    $salida .= "<div class='categorias'>";
+    while ($fila = $consulta->fetch_assoc()) {
+        $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>";  
+        $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
+        $salida .= "<strong> $" . $fila['precio'] . "</strong>";
+
+        if (!empty($fila['ruta_img'])) {
+            $rutaImagen = "../img/" . $fila['ruta_img'];
+            $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="img-thumbnail"></div>';
+        } else {
+            $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
+        }
+
+        $salida .= "<div class='carfav'>";
+        $salida .= "<button class='btn btn-primary btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
+        $salida .= "<button class='btn btn-primary btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button>";
+        $salida .= "</div><br>";
+        $salida .= "</div><br>";
+    }
+    $salida .= "</div>";
+
+    return $salida;
+}
+
+
+public static function verAccesorios($categoria) {
+    include 'modelo.php';
+    $salida = "";
+    $consulta = Modelo::sqlverAcce($categoria);
+    $salida .= "<div class='categorias'>";
+    while ($fila = $consulta->fetch_assoc()) {
+        $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>";
+        $salida .= "<h5><p><li>" . $fila['nombre_producto'] . "; por solo: </h5></li></p>";
+        $salida .= "<strong> $" . $fila['precio'] . "</strong>";
+
+        if (!empty($fila['ruta_img'])) {
+            $rutaImagen = "../imagenes/" . $fila['ruta_img'];
+            $salida .= '<div class="imagen-container"><img src="' . $rutaImagen . '" alt="' . $fila['nombre_producto'] . '" class="img-thumbnail"></div>';
+        } else {
+            $salida .= "<p class='sin-imagen'>Imagen no disponible</p>";
+        }
+        $salida .= "<div class='carfav'>";
+        $salida .= "<button class='btn btn-info btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
+        $salida .= "<button class='btn btn-info btn-favoritos' data-id='{$fila['id_producto']}'><i class='fas fa-heart'></i> Favoritos</button><br>";
+        $salida .= "</div><br>";
+        $salida .= "</div>";
+    }
+    $salida .= "</div>";
+
+    return $salida;
+}
+
 
     public static function verZapatos() {
         include 'modelo.php';
         $salida="";
-        $consulta=Modelo::sqlverZapatos();
+        $consulta=Modelo::sqlverZapatos($categoria);
         $salida .= "<div class='categorias'>";
         while ($fila = $consulta->fetch_assoc()) {
             $salida .= "<div class='categoria' data-color='" . strtolower($fila['color']) . "' data-talla='" . strtolower($fila['tallas']) . "'>"; 
@@ -436,7 +451,7 @@ class Productos{
         return $salida;
     }
      
-    
+     
     public static function verCarrito() {
         include 'modelo.php';
         $salida = "";
@@ -482,7 +497,7 @@ class Productos{
                 $salida .= "<div class='product-container'>";
                 $salida .= "<h2>" . htmlspecialchars($fila['nombre_producto']) . "</h2>";
                 $salida .= "<p>Precio: $" . htmlspecialchars($fila['precio']) . "</p>";
-                $salida .= "<img src='" . $fila['ruta_img'] . "' alt='" . htmlspecialchars($fila['nombre_producto']) . "' class='img-thumbnail'>";
+                $salida .= "<img src='../img/" . $fila['ruta_img'] . "' alt='" . htmlspecialchars($fila['nombre_producto']) . "' class='img-thumbnail'>";
                 $salida .= "<p>" . htmlspecialchars($fila['detalles']) . "</p>";
                 $salida .= "<div class='carfav'>";
                 $salida .= "<button class='btn btn-primary btn-agregar-carrito' data-id='{$fila['id_producto']}'><i class='fa fa-shopping-cart'></i> carrito</button>-";
