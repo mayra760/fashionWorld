@@ -1,28 +1,35 @@
 <?php
-include("../method/productos_class.php");
+include_once("../method/productos_class.php");
+include_once('../method/usuarios_class.php');
+include_once('../method/login_class.php');
+include_once('../method/modelo.php');
 if(!isset($_SESSION))session_start();
 
 //esto es para crear un producto
 if(isset($_GET['crear'])){
     $id_pro = $_GET['id_producto'];
+    $id_categoria = $_GET['id_categoria'];
     $nombre = $_GET['nombre'];
     $precio = $_GET['precio'];
-    $color = $_GET['color'];
-    $tallas = $_GET['tallas'];
     $cantidad = $_GET['cantidad'];
     $descripcion = $_GET['descripcion'];
-    $ruta_img = $_GET['ruta_img'];
-    if( Productos::agregarPro($id_pro, $nombre, $precio, $cantidad, $color, $tallas, $descripcion, $ruta_img) == 1){
+    $color = $_GET['color'];
+    $tallas = $_GET['tallas'];
+    $imagen = $_FILES['ruta_img'];
+    
+
+    if( Productos::agregarPro($id_pro, $id_categoria, $nombre, $precio, $cantidad, $descripcion, $color, $tallas, $ruta_img) == 1){
         header("location:ctroBar.php?seccion=verPro");
     }
 }
+
 
 //esto es para agregar una categoria
 if(isset($_GET['agreCate'])){
     $id_categoria = $_POST['id_categoria'];
     $categoria = $_POST['categoria'];
     Productos::agregarCate($id_categoria,$categoria);
-}
+} 
 
 //esto es para eliminar categoria
 if(isset($_GET['idCateEliminar'])){
@@ -59,17 +66,41 @@ if(isset($_GET['bou'])){
     }
 }
 
-if(isset($_GET['ediPro'])){
+if (isset($_GET['ediPro'])) {
     $id_producto = $_GET['dato'];
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
     $cantidad = $_POST['cantidad'];
     $detalles = $_POST['detalles'];
-    $imagen = $_FILES['imagen'];
-    if(Productos::editarProducto($id_producto,$nombre,$precio,$cantidad,$detalles,$imagen)==1){
-        header("location:ctroBar.php?seccion=verPro");
+    $color = $_POST['color'];
+    $tallas = $_POST['tallas'];
+    $imagen = '';
+
+    // Verifica si se ha subido una nueva imagen
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
+        $imagen = $_FILES['imagen']['name'];
+        $tmp_name = $_FILES['imagen']['tmp_name'];
+        $upload_dir = '../imagenes/'; // Cambia esto a tu directorio de carga
+        $upload_file = $upload_dir . basename($imagen);
+
+        // Mueve el archivo subido al directorio de destino
+        if (move_uploaded_file($tmp_name, $upload_file)) {
+            // Imagen subida correctamente
+        } else {
+            echo 'Error al subir la imagen.';
+        }
+    } else {
+        // Si no se ha subido una nueva imagen, mantiene la imagen actual
+        $imagen = Productos::datoPro(5, $id_producto);
     }
 
+    // Actualiza el producto en la base de datos
+    if (Productos::editarProducto($id_producto, $nombre, $precio, $cantidad, $detalles,$color,$tallas, $imagen) == 1) {
+        header("Location: ctroBar.php?seccion=verPro");
+        exit();
+    } else {
+        echo 'Error al actualizar el producto.';
+    }
 }
 
 if(isset($_GET['eli'])){
@@ -97,6 +128,12 @@ if(isset($_GET['IDbuscar'])){
     
 }
 
+if(isset($_GET['eliCuenta'])){
+    if(Usuarios::eliminarCuentaUser($_SESSION['id'])){
+        header("location:../index.php");
+    }
+}
+
 if(isset($_GET['ediUser'])) {
     if(isset($_GET['dato'])) {
         $idUser = $_GET['dato'];
@@ -108,3 +145,47 @@ if(isset($_GET['ediUser'])) {
         }
     }
 }
+
+
+if (isset($_POST['cambiarfoto']) && $_POST['cambiarfoto'] === 'true') {
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['foto']['tmp_name'];
+        $fileName = $_FILES['foto']['name'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $newFileName = uniqid() . '.' . $fileExtension; // Genera un nombre único para evitar conflictos
+        $uploadFileDir = '../imagenes/';
+        $dest_path = $uploadFileDir . $newFileName;
+
+        $id_admin = $_SESSION['id'];
+
+        // Obtener la foto actual del usuario
+        $consulta = Modelo::sqlPerfil($id_admin);
+        $fila = $consulta->fetch_assoc();
+        $fotoAnterior = $fila['foto'];
+
+        // Eliminar la imagen anterior si existe
+        if (!empty($fotoAnterior) && file_exists($uploadFileDir . $fotoAnterior)) {
+            unlink($uploadFileDir . $fotoAnterior);
+        }
+
+        // Mover la nueva imagen al servidor
+        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            // Actualizar la base de datos con la nueva imagen
+            if (Modelo::sqlActuFoto($newFileName, $id_admin)) {
+                // Devuelve la ruta completa para actualizar la imagen en la interfaz
+                echo $uploadFileDir . $newFileName;  
+            } else {
+                echo 'Error al actualizar la base de datos';
+            }
+        } else {
+            echo 'Error al mover el archivo';
+        }
+    } else {
+        echo 'Error en la carga del archivo';
+    }
+}
+   
+
+
+    
+

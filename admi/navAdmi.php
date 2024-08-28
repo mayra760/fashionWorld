@@ -10,7 +10,7 @@
           gtag('config', 'G-MW395SN41J');
         </script>
         
-
+ 
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,7 +37,7 @@
   <!-- class="navbar navbar-expand-lg navbar-light bg-light" -->
     <nav  class="navbar navbar-expand-lg navbar-light" style="background-color: #7ED0D8;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#"><h1><b>FASHION WORLD</b></h1></a>
+    <a class="navbar-brand" href="ctroBar.php?seccion=homeAdmi"><h1><b>FASHION WORLD</b></h1></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -75,16 +75,7 @@
     </div>
   </div>
 </nav>
-
-
-        
-
-        
-
-            
-        
-        
-        
+     
             <!-- Se declara un contenedor fila y después un contenedor columna. LAs columnas deben sumar 12, según la rejilla Bootstrap. -->
         <div class="container">
                     
@@ -102,6 +93,7 @@
     <script src="../js/ajax.js"></script>
     <script src="../js/ajaxCate.js"></script>
     <script src="../js/ajaxBusUser.js"></script>
+    <script src="../js/fotoAdmi.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    

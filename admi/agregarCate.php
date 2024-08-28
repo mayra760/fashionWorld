@@ -1,4 +1,5 @@
 <br><br>
+<title>agregar categorias</title>
     <div class="card-content" id="categoria">
       <h2>Agregar Categoría</h2>
       <form action="ctroAdmi.php?agreCate=hd" enctype="multipart/form-data" method="post">
@@ -13,6 +14,3 @@
         <input type="submit" id="b_cate" value="Agregar Categoría"><br>
       </form>
     </div>
-
-
-  

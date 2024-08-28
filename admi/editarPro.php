@@ -13,14 +13,22 @@
   <div class="col-auto">
     <input type="text" name="detalles" class="form-control" id="detalles" placeholder="Detalles" value="<?php if(isset($_GET['dato'])) echo Productos::datoPro(4,$_GET['dato']) ?>">
   </div><br>
+  <div class="col-auto">
+    <input type="text" name="color" class="form-control" id="detalles" placeholder="Color" value="<?php if(isset($_GET['dato'])) echo Productos::datoPro(5,$_GET['dato']) ?>">
+  </div><br>
+  <div class="col-auto">
+    <input type="text" name="tallas" class="form-control" id="detalles" placeholder="Tallas" value="<?php if(isset($_GET['dato'])) echo Productos::datoPro(6,$_GET['dato']) ?>">
+  </div><br>
   Imagen: <br>
-  <img id="imagenProH" src="<?php if(isset($_GET['dato'])) echo Productos::datoPro(5,$_GET['dato']) ?>" alt="Imagen del producto" style="max-width: 300px; max-height: 300px;">
+ 
   <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previewImage()" > <br><br>
   <div class="col-auto">
     <button type="submit" class="btn btn-primary mb-3">Actualizar Producto</button>
   </div></center>
 </form>
 <script src="../js/imgPrevia.js"></script>
+
+
 
 
 
