@@ -32,7 +32,7 @@ $fechas = FechaEspecial::obtenerFechas();
     <link href="../css/ofertaVis.css" rel="stylesheet">
 </head>
 <body>
-<center><a href="../usuarios/navUser.php" class="btn btn-home"><i class="fas fa-home"> Home</i></a></center>
+<center><a href="../usuarios/conBaBus.php?seccion=home" class="btn btn-home"><i class="fas fa-home"> Home</i></a></center>
 
     <h1>Fechas Especiales</h1>
     <h2>Agregar Nueva Fecha Especial</h2>

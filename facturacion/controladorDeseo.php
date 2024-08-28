@@ -1,57 +1,46 @@
 <?php
 require_once 'funciones_deseos.php'; // Asegúrate de que la ruta sea correcta
 
-session_start(); // Inicia la sesión
-
-// Establece la conexión a la base de datos
-$host = 'localhost';
-$user = 'root';
-$password = 'root';
-$database = 'fw';
-
-$conn = new mysqli($host, $user, $password, $database);
-
-// Verifica si hay algún error en la conexión
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+include '../method/db_fashion/cb.php'; // Incluye tu archivo de conexión a la base de datos
 
 // Establecer la conexión en la clase Deseos
-Deseos::setDb($conn);
+Deseos::setDb($conexion);
 
 // Manejar la acción de agregar un deseo
 if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     $documento = $_POST['documento'];
     $nombreProducto = $_POST['nombre_producto'];
-    
-    // Subir la imagen
-    if (isset($_FILES['foto_referencia']) && $_FILES['foto_referencia']['error'] == UPLOAD_ERR_OK) {
-        $nombreArchivo = basename($_FILES['foto_referencia']['name']);
-        $rutaDestino = 'uploads/' . preg_replace('/[^a-zA-Z0-9\.\-_]/', '_', $nombreArchivo);
 
-        if (move_uploaded_file($_FILES['foto_referencia']['tmp_name'], $rutaDestino)) {
-            // Verificar si el documento existe
-            $consulta = $conn->prepare('SELECT COUNT(*) FROM tb_usuarios WHERE documento = ?');
-            $consulta->bind_param('s', $documento);
-            $consulta->execute();
-            $resultado = $consulta->get_result();
-            $numUsuarios = $resultado->fetch_row()[0];
+    // Verificar si se han subido archivos
+    if (isset($_FILES['imagenes']) && $_FILES['imagenes']['error'][0] == UPLOAD_ERR_OK) {
+        $imagenes = $_FILES['imagenes'];
+        $numArchivos = count($imagenes['name']);
+        $rutasImagenes = [];
 
-            if ($numUsuarios > 0) {
-                // Agregar el deseo a la base de datos
-                if (Deseos::agregarDeseo($documento, $nombreProducto, $rutaDestino)) {
-                    header('Location: lista_deseos.php?mensaje=Producto añadido a la lista de deseos');
-                } else {
-                    header('Location: lista_deseos.php?mensaje=Error al agregar el producto');
-                }
+        for ($i = 0; $i < $numArchivos; $i++) {
+            $nombreArchivo = basename($imagenes['name'][$i]);
+            $rutaDestino = 'uploads/' . preg_replace('/[^a-zA-Z0-9\.\-_]/', '_', $nombreArchivo);
+
+            if (move_uploaded_file($imagenes['tmp_name'][$i], $rutaDestino)) {
+                $rutasImagenes[] = $rutaDestino; // Guarda la ruta de cada imagen
             } else {
-                header('Location: lista_deseos.php?mensaje=El documento del usuario no existe');
+                // Si ocurre un error al subir una imagen, redirige con un mensaje de error
+                header('Location: lista_deseos.php?mensaje=Error al subir algunas imágenes');
+                exit;
             }
-        } else {
-            header('Location: lista_deseos.php?mensaje=Error al subir la imagen');
+        }
+
+        // Agregar el deseo a la base de datos para cada imagen
+        foreach ($rutasImagenes as $ruta) {
+            if (Deseos::agregarDeseo($documento, $nombreProducto, $ruta)) {
+                header('Location: lista_deseos.php?mensaje=Producto añadido a la lista de deseos');
+            } else {
+                header('Location: lista_deseos.php?mensaje=Error al agregar el producto');
+                exit;
+            }
         }
     } else {
-        header('Location: lista_deseos.php?mensaje=Error al subir la imagen');
+        header('Location: lista_deseos.php?mensaje=No se han subido imágenes');
     }
 }
 
@@ -65,6 +54,6 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'eliminar') {
     }
 }
 
-// Cerrar la conexión
-$conn->close();
+// Cerrar conexión
+$conexion->close();
 ?>

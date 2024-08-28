@@ -1,5 +1,5 @@
 <?php
-include '../method/db_fashion/cb.php';
+include '../method/db_fashion/cb.php'; // Asegúrate de que este archivo tiene la conexión a la base de datos
 
 function obtenerProductosCarrito() {
     global $con;
@@ -18,7 +18,7 @@ function crearFactura($documento_usuario, $metodo_pago, $direccion, $telefono, $
     global $con;
 
     // Validar documento_usuario
-    if (!is_int($documento_usuario) || $documento_usuario <= 0) {
+    if (!is_numeric($documento_usuario) || $documento_usuario <= 0) {
         die('Documento de usuario inválido.');
     }
 
@@ -43,9 +43,9 @@ function crearFactura($documento_usuario, $metodo_pago, $direccion, $telefono, $
 
         // Insertar los detalles de la factura
         foreach ($productos as $producto) {
-            $id_producto = isset($producto['id_producto']) ? (int)$producto['id_producto'] : 0;
-            $cantidad = isset($producto['cantidad_pro']) ? (int)$producto['cantidad_pro'] : 0;
-            $precio_unitario = isset($producto['precio_pro']) ? (float)$producto['precio_pro'] : 0.0;
+            $id_producto = (int)$producto['id_producto'];
+            $cantidad = (int)$producto['cantidad_pro'];
+            $precio_unitario = (float)$producto['precio_pro'];
             $subtotal = $precio_unitario * $cantidad;
 
             $sqlDetalle = "INSERT INTO tb_detalle_factura (id_factura, id_producto, cantidad, precio_unitario, subtotal)
@@ -64,7 +64,6 @@ function crearFactura($documento_usuario, $metodo_pago, $direccion, $telefono, $
     }
 }
 
-
 function obtenerFactura($factura_id) {
     global $con;
     $sql = "SELECT * FROM tb_facturas WHERE id_factura = '$factura_id'";
@@ -74,15 +73,19 @@ function obtenerFactura($factura_id) {
 
 function obtenerDetallesFactura($factura_id) {
     global $con;
-    $sql = "SELECT df.*, p.nombre_producto FROM tb_detalle_factura df JOIN tb_productos p ON df.id_producto = p.id_producto WHERE id_factura = '$factura_id'";
+    $sql = "SELECT df.*, p.nombre_producto 
+            FROM tb_detalle_factura df 
+            JOIN tb_productos p ON df.id_producto = p.id_producto 
+            WHERE df.id_factura = '$factura_id'";
     $result = mysqli_query($con, $sql);
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 function obtenerTodosLosProductos() {
-    global $conexion;
-    $sql = $conexion->prepare ("SELECT * FROM tb_productos");
-    $result = mysqli_query($conexion, $sql);
+    global $con;
+    $sql = "SELECT * FROM tb_productos";
+    $result = mysqli_query($con, $sql);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 function agregarAlCarrito($id_producto, $cantidad) {

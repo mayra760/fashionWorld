@@ -1,56 +1,43 @@
 <?php
-
 class Deseos {
     private static $db;
 
-    // Método para establecer la conexión a la base de datos
-    public static function setDb($database) {
-        self::$db = $database;
+    // Establecer la conexión a la base de datos
+    public static function setDb($conexion) {
+        self::$db = $conexion;
     }
 
-    // Método para agregar un producto a la lista de deseos
+    // Verificar si el documento existe en la base de datos
+    public static function verificarDocumento($documento) {
+        $consulta = self::$db->prepare('SELECT COUNT(*) FROM tb_usuarios WHERE documento = ?');
+        $consulta->bind_param('s', $documento);
+        $consulta->execute();
+        $resultado = $consulta->get_result();
+        $numUsuarios = $resultado->fetch_row()[0];
+        return $numUsuarios > 0;
+    }
+
+    // Agregar un deseo a la base de datos
     public static function agregarDeseo($documento, $nombreProducto, $fotoReferencia) {
-        if (self::$db === null) {
-            throw new Exception("La conexión a la base de datos no está establecida.");
-        }
-        $sql = "INSERT INTO tb_lista_deseos (documento, nombre_producto, foto_referencia) 
-                VALUES (?, ?, ?)";
-        $stmt = self::$db->prepare($sql);
-        if ($stmt === false) {
-            throw new Exception("Error en la preparación de la consulta: " . self::$db->error);
-        }
-        $stmt->bind_param("sss", $documento, $nombreProducto, $fotoReferencia);
-        return $stmt->execute();
+        $insercion = self::$db->prepare('INSERT INTO tb_lista_deseos (documento, nombre_producto, foto_referencia) VALUES (?, ?, ?)');
+        $insercion->bind_param('sss', $documento, $nombreProducto, $fotoReferencia);
+        return $insercion->execute();
     }
+    
 
-    // Método para obtener todos los deseos de un usuario
-    public static function obtenerDeseos($documento) {
-        if (self::$db === null) {
-            throw new Exception("La conexión a la base de datos no está establecida.");
-        }
-        $sql = "SELECT id_deseo, nombre_producto, foto_referencia 
-                FROM tb_lista_deseos WHERE documento = ?";
-        $stmt = self::$db->prepare($sql);
-        if ($stmt === false) {
-            throw new Exception("Error en la preparación de la consulta: " . self::$db->error);
-        }
-        $stmt->bind_param("s", $documento);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-
-    // Método para eliminar un deseo por su ID
+    // Eliminar un deseo de la base de datos
     public static function eliminarDeseo($idDeseo) {
-        if (self::$db === null) {
-            throw new Exception("La conexión a la base de datos no está establecida.");
-        }
-        $sql = "DELETE FROM tb_lista_deseos WHERE id_deseo = ?";
-        $stmt = self::$db->prepare($sql);
-        if ($stmt === false) {
-            throw new Exception("Error en la preparación de la consulta: " . self::$db->error);
-        }
-        $stmt->bind_param("i", $idDeseo);
-        return $stmt->execute();
+        $eliminacion = self::$db->prepare('DELETE FROM tb_lista_deseos WHERE id_deseo = ?');
+        $eliminacion->bind_param('i', $idDeseo);
+        return $eliminacion->execute();
+    }
+
+    // Obtener deseos de la base de datos para un usuario específico
+    public static function obtenerDeseos($documento) {
+        $consulta = self::$db->prepare('SELECT * FROM tb_lista_deseos WHERE documento = ?');
+        $consulta->bind_param('s', $documento);
+        $consulta->execute();
+        return $consulta->get_result();
     }
 }
 ?>
